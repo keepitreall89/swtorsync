@@ -1,7 +1,8 @@
 import os
 import pathlib
 import configparser
-
+#for debugging only
+import sys
 
 '''Object to store category and decription of setting keys in an organized way.'''
 class Setting:
@@ -14,7 +15,7 @@ class Setting:
         return str(self)
 
 '''Parses or writes a settings file using configparser'''
-class Settings:
+class Swtor_Toon_Data:
     setting_mapping = {"ChatColors" : Setting("Chat", "Chat Colors"),
                        "ChatChannels": Setting("Chat", "Chat Channels"),
                        "ChatPanel_1Index": Setting("Chat", "Chat Index"),
@@ -27,20 +28,45 @@ class Settings:
     def __init__(self, file_path):
         self.file_path = pathlib.Path(file_path)
         self.error = False
+        if not self.file_path.exists():
+            self.error = True
+            print("File doesnt exist")
         self.config = None
+        self.name = None
+        self.version = None
         #cast to path, parse version number
         try:
+            self.file_name = self.file_path.parts
+            self.file_name = self.file_name[len(self.file_name)-1]
+            parts = str(self.file_name).split('_')
+            if len(parts)>=3:
+                if parts[len(parts)-1].lower()!='playerguistate.ini':
+                    self.error = True
+                    print("Error parsing name: {}".format(parts))
+                else:
+                    self.version = parts[0]
+                    if len(parts)>3:
+                        self.name = parts[1:len(parts)-1].join("_")
+                    else:
+                        self.name = parts[1]
+            else:
+                self.error = True
+                print("Error parsing name: {}".format(parts))
             self.config = configparser.ConfigParser(delimiters="=")
-            self.config.read_file(file_path)
+            self.config.read(self.file_path)
+            print(self.config.sections())
             if not ("ChatChannels" in self.config['Settings'].keys() and "GUI_Current_Profile" in self.config['Settings'].keys()):
                 self.error = True
+                print("Required elements not in file or error reading")
         except:
             self.error = True
+            print("Unexpected error:", sys.exc_info()[0])
+            print("Error Reading")
     def write(self):
         with open(self.file_path, 'w') as config_file:
             self.config.write(config_file)
     def __str__(self):
-        return str(self.file_path)
+        return "File: {}\tName: {}\tError: {}".format(str(self.file_path), self.name, self.error)
     def __repr__(self):
         return str(self.file_path)+'\n'+str(self.config)
         
@@ -80,6 +106,8 @@ class SettingsLocater:
 
 
 if __name__ == "__main__":
-    settings = SettingsLocater()
-    for f in settings.config_files:
-        print(f.file_name)
+    #settings = SettingsLocater()
+    #for f in settings.config_files:
+        #print(f.file_name)
+    toon = Swtor_Toon_Data("C:\\Users\\keepi\\AppData\\Local\\SWTOR\\swtor\\settings\\he3000_Isell Spice_PlayerGUIState.ini")
+    print(toon)
