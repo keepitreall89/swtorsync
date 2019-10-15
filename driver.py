@@ -24,7 +24,11 @@ class Swtor_Toon_Data:
                        "GUI_MiniMapZoom": Setting("GUI", "Minimap Zoom"),
                        "GUI_QuickslotLockState": Setting("GUI", "Quick bar lock state"),
                        "GUI_GalaxyMapViewedForFirstTime": Setting("Tutorial", "First Time Galaxy Map Tutorial"),
-                       "GUI_GCConfirmOpenPack": Setting("Confirmation", "Galactic Command Crate confirmation")}
+                       "GUI_GCConfirmOpenPack": Setting("Confirmation", "Galactic Command Crate confirmation"),
+                       "Show_Chat_TimeStamp": Setting("Chat", "Chat Timestamps"),
+                       "Chat_Custom_Channels": Setting("Chat", "Custom Channels"),
+                       "GUI_CompanionQuickbarExtended": Setting("GUI", "Extended Companion Quickbar"),
+                       "GUI_ShowCooldownText": Setting("GUI", "Cooldown ability text")}
     def __init__(self, file_path):
         self.file_path = pathlib.Path(file_path)
         self.error = False
@@ -85,9 +89,11 @@ class SettingsLocater:
                 if not os.path.isdir(self.swtor_directory/child):
                     self.files.append(self.swtor_directory/child)
                 filename = str(child).split('.')
-                if str(filename[len(filename)-1]).lower()==str('ini').lower():
-                    print()
-                    #self.config_files.append(FileNameToken(self.swtor_directory/child, child))
+                if str(filename[len(filename)-1]).lower()=='ini':
+                    #print()
+                    self.config_files.append(pathlib.Path(self.swtor_directory/child))
+        else:
+            print("Directory does not exist")
 
     """Searches through the directory and returns a list of files with an extension matching file_type_extension. Is not case sensetive."""
     def search_again(self):
@@ -106,8 +112,8 @@ class SettingsLocater:
 
 
 if __name__ == "__main__":
-    #settings = SettingsLocater()
-    #for f in settings.config_files:
-        #print(f.file_name)
-    toon = Swtor_Toon_Data("C:\\Users\\keepi\\AppData\\Local\\SWTOR\\swtor\\settings\\he3000_Isell Spice_PlayerGUIState.ini")
-    print(toon)
+    settings = SettingsLocater()
+    for f in settings.config_files:
+        print(f)
+    #toon = Swtor_Toon_Data("C:\\Users\\keepi\\AppData\\Local\\SWTOR\\swtor\\settings\\he3000_Isell Spice_PlayerGUIState.ini")
+    #print(toon)
