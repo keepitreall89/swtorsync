@@ -28,7 +28,13 @@ class Swtor_Toon_Data:
                        "Show_Chat_TimeStamp": Setting("Chat", "Chat Timestamps"),
                        "Chat_Custom_Channels": Setting("Chat", "Custom Channels"),
                        "GUI_CompanionQuickbarExtended": Setting("GUI", "Extended Companion Quickbar"),
-                       "GUI_ShowCooldownText": Setting("GUI", "Cooldown ability text")}
+                       "GUI_ShowCooldownText": Setting("GUI", "Cooldown ability text"),
+                       "GUI_ShowAlignment": Setting("GUI", "Show DvL Alignment"),
+                       "GUI_TrackerAchievementVisible": Setting("GUI", "Achivement Tracker visable"),
+                       "GUI_TrackerQuestVisible": Setting("GUI", "Mission Tracker visable"),
+                       "GUI_DisciplineConfirmUnspentDialog": Setting("Confirmation", "Unspent Utility points confirmation"),
+                       "GUI_DisciplineConfirmUncommittedUtilityDialog": Setting("Confirmation", "Uncommitted Utilities confirmation"),
+                       "GUI_StrongholdPersonalSort": Setting("GUI", "Stronghold Sort order")}
     def __init__(self, file_path):
         self.file_path = pathlib.Path(file_path)
         self.error = False
