@@ -38,6 +38,7 @@ class Swtor_Toon_Data:
     def __init__(self, file_path):
         self.file_path = pathlib.Path(file_path)
         self.error = False
+        self.changes = False
         if not self.file_path.exists():
             self.error = True
             print("File doesnt exist")
@@ -72,6 +73,18 @@ class Swtor_Toon_Data:
             self.error = True
             print("Unexpected error:", sys.exc_info()[0])
             print("Error Reading")
+    def set(self, key, value):
+        if key in self.config['Settings']:
+            if self.config['Settings'][key]!=value:
+                self.changes=True
+                self.config['Settings'][key]=value
+        else:
+            self.changes=True
+            self.config['Settings'][key]=value
+    def has(self, key):
+        return key in self.config['Settings']
+    def get(self, key):
+        return self.config['Settings'][key]
     def write(self):
         with open(self.file_path, 'w') as config_file:
             self.config.write(config_file)
@@ -121,5 +134,13 @@ if __name__ == "__main__":
     settings = SettingsLocater()
     for f in settings.config_files:
         print(f)
+    source = Swtor_Toon_Data("C:\\Users\\keepi\\AppData\\Local\\SWTOR\\swtor\\settings\\he3000_Idontdocrack_PlayerGUIState.ini")
+    destination =\
+        Swtor_Toon_Data("C:\\Users\\keepi\\AppData\\Local\\SWTOR\\swtor\\settings\\he3000_Isell Spice_PlayerGUIState.ini")
+    for k in source.setting_mapping.keys():
+        if source.has(k):
+            destination.set(k, source.get(k))
+    destination.write()
+    #Test by coping IDDC to ISS
     #toon = Swtor_Toon_Data("C:\\Users\\keepi\\AppData\\Local\\SWTOR\\swtor\\settings\\he3000_Isell Spice_PlayerGUIState.ini")
     #print(toon)
